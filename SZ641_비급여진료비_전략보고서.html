@@ -1,290 +1,479 @@
 <!DOCTYPE html>
-<html class="dark" lang="ko">
+<html lang="ko" class="dark">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SZ641 비급여 진료비 전략 보고서 - 남양주백병원</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;900&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;800&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-tailwind.config = {
-    darkMode: "class",
-    theme: {
-        extend: {
-            "colors": {
-                "on-tertiary-fixed-variant": "#2f2ebe",
-                "on-primary-container": "#9d7d00",
-                "error": "#ffb4ab",
-                "on-background": "#dce1fb",
-                "on-tertiary-fixed": "#07006c",
-                "background": "#0c1324",
-                "on-surface-variant": "#c6c6cd",
-                "surface-container": "#191f31",
-                "surface": "#0c1324",
-                "primary": "#e9c349",
-                "surface-container-low": "#151b2d",
-                "inverse-on-surface": "#2a3043",
-                "surface-variant": "#2e3447",
-                "surface-container-highest": "#2e3447",
-                "on-surface": "#dce1fb",
-                "on-primary": "#3c2f00"
-            },
-            "fontFamily": {
-                "headline": ["Pretendard", "Inter", "sans-serif"],
-                "body": ["Pretendard", "Inter", "sans-serif"],
-                "label": ["Inter", "sans-serif"]
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SZ641 경영 전략 보고서 | 남양주백병원</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    },
+                    colors: {
+                        premium: {
+                            black: '#0a0a0c',
+                            carbon: '#141417',
+                            charcoal: '#1f1f24',
+                            gold: '#d4af37',
+                            lightgold: '#f3e5ab',
+                            navy: '#1a2a40',
+                            blue: '#4a90e2'
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'glow-pulse': 'glowPulse 3s infinite alternate'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        glowPulse: {
+                            '0%': { boxShadow: '0 0 15px rgba(212, 175, 55, 0.1)' },
+                            '100%': { boxShadow: '0 0 35px rgba(212, 175, 55, 0.3)' }
+                        }
+                    }
+                }
             }
         }
-    }
-}
-</script>
-<style>
-.glass-card { background: rgba(46, 52, 71, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-body { font-family: 'Pretendard', sans-serif; min-height: max(884px, 100dvh); }
-</style>
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@300,1&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #0a0a0c;
+            color: #ffffff;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 15% 50%, rgba(26, 42, 64, 0.4), transparent 25%),
+                              radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.05), transparent 25%);
+        }
+        
+        .glass-panel {
+            background: rgba(31, 31, 36, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .gold-text-gradient {
+            background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #997a15 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .blue-text-gradient {
+            background: linear-gradient(135deg, #a0c4ff 0%, #4a90e2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-hover-effect {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.3);
+            background: rgba(40, 40, 45, 0.8);
+        }
+
+        /* Wait rendering for animation */
+        .anim-element { opacity: 0; }
+        
+        .chart-container {
+            position: relative;
+            height: 120px;
+            width: 100%;
+            margin-top: 1rem;
+        }
+    </style>
 </head>
-<body class="bg-background text-on-surface selection:bg-primary selection:text-on-primary">
-<header class="fixed top-0 w-full z-50 bg-[#0c1324]/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex justify-between items-center px-8 py-4">
-    <div class="flex items-center gap-4">
-        <span class="material-symbols-outlined text-[#e9c349] text-2xl" data-icon="clinical_notes">clinical_notes</span>
-        <h1 class="font-headline tracking-tight text-[#e9c349] font-bold uppercase text-xl">SZ641 비급여 진료비 분석 및 경영 전략</h1>
-    </div>
-    <div class="flex items-center gap-6">
-        <nav class="hidden md:flex gap-8">
-            <a class="text-[#e9c349] border-b-2 border-[#e9c349] font-label uppercase text-sm py-1" href="#">Overview</a>
-            <a class="text-[#c6c6cd] hover:text-[#e9c349] transition-colors font-label uppercase text-sm py-1" href="#market">Market</a>
-            <a class="text-[#c6c6cd] hover:text-[#e9c349] transition-colors font-label uppercase text-sm py-1" href="#track">Strategy</a>
-        </nav>
-    </div>
-</header>
+<body class="antialiased min-h-screen pb-20">
 
-<main class="pt-28 pb-20 px-8 max-w-[1600px] mx-auto">
-<section id="market" class="mb-16">
-    <div class="flex items-end justify-between mb-8">
-        <div>
-            <span class="text-primary font-label uppercase tracking-widest text-sm block mb-2">Market Intelligence</span>
-            <h2 class="text-3xl font-bold text-on-surface tracking-tight font-headline">1. SZ641 지역별 비급여 시장 가격 분포</h2>
-        </div>
-        <div class="hidden md:block text-right">
-            <p class="text-on-surface-variant text-sm font-light">기준 시점: 2026년 4월 (HIRA Data)</p>
-        </div>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        
-        <!-- 남양주 -->
-        <div class="glass-card rounded-xl p-6 relative overflow-hidden group hover:bg-surface-container-highest transition-all duration-300">
-            <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
-            <div class="flex justify-between items-start mb-6">
-                <h3 class="text-[#e9c349] font-bold tracking-widest text-sm uppercase">📍 남양주 (Namyangju)</h3>
-                <span class="material-symbols-outlined text-[#e9c349]/30 group-hover:text-primary transition-colors" data-icon="location_on">location_on</span>
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/5 px-8 py-5">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-premium-gold text-3xl" style="color:#d4af37">local_hospital</span>
+                <span class="font-bold tracking-widest text-lg uppercase text-white/90">Namyangju Baek Hospital</span>
             </div>
-            <div class="space-y-4">
-                <div class="flex justify-between items-baseline">
-                    <span class="text-on-surface-variant text-xs uppercase tracking-widest">중위값</span>
-                    <span class="text-2xl font-bold text-on-surface">2,200,000 원</span>
-                </div>
-                <div class="h-[2px] bg-outline-variant/20 w-full"></div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1">최저값</p>
-                        <p class="text-lg font-semibold text-on-surface">1,200,000 원</p>
-                        <p class="text-[10px] text-primary/80 font-medium mt-1">다산바른신경외과의원</p>
-                    </div>
-                    <div>
-                        <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1">최고값</p>
-                        <p class="text-lg font-semibold text-on-surface">3,500,000 원</p>
-                        <p class="text-[10px] text-primary/80 font-medium mt-1">남양주정형외과병원</p>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1 text-center">평균값</p>
-                    <p class="text-xl font-bold text-center text-primary">2,350,000 원</p>
-                </div>
+            <div class="hidden md:flex gap-8 text-sm tracking-widest uppercase font-medium text-white/50">
+                <a href="#market" class="hover:text-premium-gold transition-colors">Market Index</a>
+                <a href="#strategy" class="hover:text-premium-gold transition-colors">Strategy</a>
             </div>
+            <div class="text-xs text-white/40 tracking-[0.2em]">Sovereign Intelligence</div>
         </div>
+    </nav>
 
-        <!-- 경기 -->
-        <div class="glass-card rounded-xl p-6 hover:bg-surface-container-highest transition-all duration-300">
-            <div class="flex justify-between items-start mb-6">
-                <h3 class="text-on-surface-variant font-bold tracking-widest text-sm uppercase">🏢 경기권 (Gyeonggi)</h3>
-                <span class="material-symbols-outlined text-outline-variant" data-icon="map">map</span>
-            </div>
-            <div class="space-y-4">
-                <div class="flex justify-between items-baseline">
-                    <span class="text-on-surface-variant text-xs uppercase tracking-widest">중위값</span>
-                    <span class="text-2xl font-bold text-on-surface">2,800,000 원</span>
-                </div>
-                <div class="h-[2px] bg-outline-variant/20 w-full"></div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1">최저값</p>
-                        <p class="text-lg font-semibold text-on-surface">900,000 원</p>
-                        <p class="text-[10px] text-on-surface-variant/80 font-medium mt-1">수원튼튼마취통증의원</p>
-                    </div>
-                    <div>
-                        <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1">최고값</p>
-                        <p class="text-lg font-semibold text-on-surface">5,200,000 원</p>
-                        <p class="text-[10px] text-on-surface-variant/80 font-medium mt-1">분당서울대병원</p>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1 text-center">평균값</p>
-                    <p class="text-xl font-bold text-center text-on-surface">2,950,000 원</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 서울 -->
-        <div class="glass-card rounded-xl p-6 hover:bg-surface-container-highest transition-all duration-300">
-            <div class="flex justify-between items-start mb-6">
-                <h3 class="text-on-surface-variant font-bold tracking-widest text-sm uppercase">🏙 서울권 (Seoul)</h3>
-                <span class="material-symbols-outlined text-outline-variant" data-icon="domain">domain</span>
-            </div>
-            <div class="space-y-4">
-                <div class="flex justify-between items-baseline">
-                    <span class="text-on-surface-variant text-xs uppercase tracking-widest">중위값</span>
-                    <span class="text-2xl font-bold text-on-surface">3,200,000 원</span>
-                </div>
-                <div class="h-[2px] bg-outline-variant/20 w-full"></div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1">최저값</p>
-                        <p class="text-lg font-semibold text-on-surface">1,000,000 원</p>
-                        <p class="text-[10px] text-on-surface-variant/80 font-medium mt-1">구로연합의원</p>
-                    </div>
-                    <div>
-                        <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1">최고값</p>
-                        <p class="text-lg font-semibold text-on-surface">8,500,000 원</p>
-                        <p class="text-[10px] text-on-surface-variant/80 font-medium mt-1">강남척추전문 S병원</p>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1 text-center">평균값</p>
-                    <p class="text-xl font-bold text-center text-on-surface">3,500,000 원</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 전국 -->
-        <div class="glass-card rounded-xl p-6 hover:bg-surface-container-highest transition-all duration-300">
-            <div class="flex justify-between items-start mb-6">
-                <h3 class="text-on-surface-variant font-bold tracking-widest text-sm uppercase">🌏 전국 평균 (National)</h3>
-                <span class="material-symbols-outlined text-outline-variant" data-icon="public">public</span>
-            </div>
-            <div class="space-y-4">
-                <div class="flex justify-between items-baseline">
-                    <span class="text-on-surface-variant text-xs uppercase tracking-widest">중위값</span>
-                    <span class="text-2xl font-bold text-on-surface">2,700,000 원</span>
-                </div>
-                <div class="h-[2px] bg-outline-variant/20 w-full"></div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1">최저값</p>
-                        <p class="text-lg font-semibold text-on-surface">600,000 원</p>
-                        <p class="text-[10px] text-on-surface-variant/80 font-medium mt-1">부산우리들라인의원</p>
-                    </div>
-                    <div>
-                        <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1">최고값</p>
-                        <p class="text-lg font-semibold text-on-surface">9,900,000 원</p>
-                        <p class="text-[10px] text-on-surface-variant/80 font-medium mt-1">서울강남K척추병원</p>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <p class="text-on-surface-variant text-xs uppercase tracking-widest mb-1 text-center">평균값</p>
-                    <p class="text-xl font-bold text-center text-on-surface">3,050,000 원</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Section 2: Two-Track Strategy -->
-<section id="track" class="mb-16">
-    <div class="mb-8">
-        <span class="text-primary font-label uppercase tracking-widest text-sm block mb-2">Strategic Deployment</span>
-        <h2 class="text-3xl font-bold text-on-surface tracking-tight font-headline">2. Two-Track 수가 전략</h2>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
-        <!-- Track A: AI Statistical -->
-        <div class="bg-surface-container-high rounded-2xl p-10 border-l-4 border-primary/40 relative overflow-hidden group hover:scale-[1.02] transition-transform">
-            <div class="absolute -right-8 -top-8 text-primary/10 pointer-events-none group-hover:scale-110 transition-transform duration-700">
-                <span class="material-symbols-outlined text-[150px]" data-icon="smart_toy">smart_toy</span>
-            </div>
-            <div class="flex items-center gap-3 mb-6 relative">
-                <span class="material-symbols-outlined text-primary" data-icon="trending_up">trending_up</span>
-                <h3 class="text-2xl font-bold text-on-surface font-headline">Track A: AI 통계 기반가</h3>
-            </div>
-            <div class="mb-8 relative">
-                <span class="text-4xl font-black text-primary tracking-tighter">3,200,000 ~ 3,500,000 원</span>
-                <p class="text-on-surface-variant mt-2 font-medium">시장 침투 및 점유율 방어형 기계적 가격 설정</p>
-            </div>
-            <ul class="space-y-4 relative">
-                <li class="flex items-start gap-3">
-                    <span class="material-symbols-outlined text-primary text-sm mt-1" data-icon="check_circle">check_circle</span>
-                    <span class="text-on-surface/80 text-sm">경기권 중위 통계에 근거하여 환자 저항(맘카페 등)을 0%로 수렴</span>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="material-symbols-outlined text-primary text-sm mt-1" data-icon="check_circle">check_circle</span>
-                    <span class="text-on-surface/80 text-sm">실손 보험 청구 삭감 방어를 위한 중앙값(Median) 타겟팅 기준점</span>
-                </li>
-            </ul>
-        </div>
-        
-        <!-- Track B: Signature Premium -->
-        <div class="bg-[#23293c] rounded-2xl p-10 border-l-4 border-[#e9c349] shadow-2xl relative overflow-hidden group hover:scale-[1.02] transition-transform">
-            <div class="absolute -right-8 -top-8 text-[#e9c349]/10 pointer-events-none group-hover:rotate-12 transition-transform duration-700">
-                <span class="material-symbols-outlined text-[150px]" data-icon="stars">stars</span>
-            </div>
-            <div class="flex items-center gap-3 mb-6 relative">
-                <span class="material-symbols-outlined text-[#e9c349]" data-icon="workspace_premium">workspace_premium</span>
-                <h3 class="text-2xl font-bold text-[#e9c349] font-headline">Track B: 시그니처 프리미엄가 (★권장)</h3>
-            </div>
-            <div class="mb-8 relative">
-                <span class="text-4xl font-black text-[#e9c349] tracking-tighter">4,500,000 ~ 4,800,000 원</span>
-                <p class="text-[#e9c349]/80 mt-2 font-medium italic">High-End 최고 의료 서비스 가치 극대화 포지셔닝</p>
-            </div>
-            <ul class="space-y-4 relative">
-                <li class="flex items-start gap-3">
-                    <span class="material-symbols-outlined text-[#e9c349] text-sm mt-1" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                    <span class="text-on-surface text-sm">서울 강남권 대형병원 수준의 비급여 패키지 구성 및 압도적 품질 보장</span>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="material-symbols-outlined text-[#e9c349] text-sm mt-1" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                    <span class="text-on-surface text-sm">초저가(공장형 100만대)와 초고가(바가지 700만대)를 모두 배제한 가장 윤리적이고 합리적인 Range의 최대 수익값</span>
-                </li>
-            </ul>
-        </div>
-
-    </div>
-</section>
-
-<!-- Section 3: Philosophy -->
-<section class="mt-24">
-    <div class="glass-card rounded-[2rem] p-12 text-center max-w-4xl mx-auto border border-outline-variant/10 relative shadow-2xl">
-        <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-primary flex items-center justify-center rounded-full text-on-primary">
-            <span class="material-symbols-outlined" data-icon="format_quote">format_quote</span>
-        </div>
-        <h3 class="font-label uppercase tracking-[0.2em] text-sm text-primary mb-6">Strategic Philosophy</h3>
-        <p class="text-xl md:text-2xl font-light italic text-on-surface leading-relaxed mb-8">
-            "가장 정교한 결정은 철저한 데이터에서 나오지만, 가장 위대한 전략은 타협하지 않는 병원의 철학에서 시작됩니다."
+    <!-- Header Section -->
+    <header class="pt-40 pb-20 px-8 max-w-7xl mx-auto text-center anim-element" style="animation-delay: 0.1s;">
+        <p class="text-premium-gold font-semibold tracking-[0.3em] uppercase text-sm mb-6">Executive Pricing Strategy</p>
+        <h1 class="text-5xl md:text-7xl font-bold mb-8 tracking-tight">
+            <span class="text-white">SZ641 비급여 진료비</span><br>
+            <span class="gold-text-gradient font-serif italic mt-2 inline-block">Positioning Report</span>
+        </h1>
+        <p class="text-white/50 max-w-2xl mx-auto text-lg leading-relaxed font-light">
+            데이터 기반의 정교한 통계 분석과 최고 수준의 의료 가치를 융합한 <br>
+            남양주백병원만의 이원화(Two-Track) 수가 전략 모델
         </p>
-        <div class="flex flex-col items-center">
-            <div class="w-12 h-[1px] bg-primary/40 mb-4"></div>
-            <span class="font-bold text-on-surface font-headline">남양주백병원 전략기획위원회</span>
-            <span class="text-xs text-on-surface-variant uppercase tracking-widest mt-1">Namyangju Baek Hospital - Sovereign Intelligence</span>
+    </header>
+
+    <!-- HIRA Data Section -->
+    <section id="market" class="max-w-7xl mx-auto px-8 mb-24 anim-element" style="animation-delay: 0.3s;">
+        <div class="flex items-center justify-between mb-10">
+            <div>
+                <h2 class="text-3xl font-bold tracking-tight">Market Intelligence</h2>
+                <p class="text-white/40 mt-2 font-light">건강보험심사평가원(HIRA) 데이터 기준 4대 지표 분석 (단위: 만원)</p>
+            </div>
+            <div class="text-right hidden md:block">
+                <div class="inline-flex items-center gap-2 glass-panel px-4 py-2 rounded-full text-xs text-white/60">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    Live Data Updated: 2026.04
+                </div>
+            </div>
         </div>
-    </div>
-</section>
-</main>
-<footer class="bg-background w-full py-12 px-8 border-t border-[#45464d]/15 flex flex-col items-center gap-6 mt-10">
-    <div class="text-primary font-semibold text-sm tracking-tight font-headline">Luca & Antigravity Agent Module</div>
-    <p class="font-label text-xs tracking-widest uppercase text-[#c6c6cd]">
-        © 2026 Namyangju Baek Hospital. Advanced Multi-Agent Intelligence.
-    </p>
-</footer>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- 남양주 -->
+            <div class="glass-panel p-6 rounded-2xl card-hover-effect relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-premium-blue/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-premium-gold/20 transition-all"></div>
+                <h3 class="text-sm font-bold tracking-widest uppercase text-white/50 mb-6 flex items-center justify-between">
+                    <span>📍 남양주</span>
+                    <span class="text-premium-blue font-mono group-hover:text-premium-gold transition-colors">Local</span>
+                </h3>
+                
+                <div class="space-y-4 relative z-10">
+                    <div class="flex justify-between items-end border-b border-white/5 pb-3">
+                        <span class="text-xs text-white/40">중위값 (Median)</span>
+                        <span class="text-2xl font-bold">220.0</span>
+                    </div>
+                    <div class="flex justify-between items-end border-b border-white/5 pb-3">
+                        <span class="text-xs text-white/40">평균값 (Mean)</span>
+                        <span class="text-xl font-semibold text-white/80">235.0</span>
+                    </div>
+                    <div class="pt-2">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-white/40">최저 (다산바른신경외과)</span>
+                            <span class="text-white/70">120.0</span>
+                        </div>
+                        <div class="w-full bg-white/5 rounded-full h-1.5 mb-3">
+                            <div class="bg-premium-blue h-1.5 rounded-full" style="width: 34%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-white/40">최고 (남양주정형외과)</span>
+                            <span class="text-premium-gold">350.0</span>
+                        </div>
+                        <div class="w-full bg-white/5 rounded-full h-1.5">
+                            <div class="bg-premium-gold h-1.5 rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container"><canvas id="chartNYJ"></canvas></div>
+            </div>
+
+            <!-- 경기권 -->
+            <div class="glass-panel p-6 rounded-2xl card-hover-effect relative overflow-hidden group">
+                <h3 class="text-sm font-bold tracking-widest uppercase text-white/50 mb-6 flex items-center justify-between">
+                    <span>🏢 경기권</span>
+                    <span class="text-white/30 font-mono group-hover:text-premium-gold transition-colors">Provincial</span>
+                </h3>
+                <div class="space-y-4 relative z-10">
+                    <div class="flex justify-between items-end border-b border-white/5 pb-3">
+                        <span class="text-xs text-white/40">중위값 (Median)</span>
+                        <span class="text-2xl font-bold">280.0</span>
+                    </div>
+                    <div class="flex justify-between items-end border-b border-white/5 pb-3">
+                        <span class="text-xs text-white/40">평균값 (Mean)</span>
+                        <span class="text-xl font-semibold text-white/80">295.0</span>
+                    </div>
+                    <div class="pt-2">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-white/40">최저 (수원튼튼마취)</span>
+                            <span class="text-white/70">90.0</span>
+                        </div>
+                        <div class="w-full bg-white/5 rounded-full h-1.5 mb-3">
+                            <div class="bg-white/20 h-1.5 rounded-full" style="width: 17%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-white/40">최고 (분당서울대)</span>
+                            <span class="text-white/90">520.0</span>
+                        </div>
+                        <div class="w-full bg-white/5 rounded-full h-1.5">
+                            <div class="bg-white/40 h-1.5 rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container"><canvas id="chartGG"></canvas></div>
+            </div>
+
+            <!-- 서울권 -->
+            <div class="glass-panel p-6 rounded-2xl card-hover-effect relative overflow-hidden group">
+                <h3 class="text-sm font-bold tracking-widest uppercase text-white/50 mb-6 flex items-center justify-between">
+                    <span>🏙 서울권</span>
+                    <span class="text-white/30 font-mono group-hover:text-premium-gold transition-colors">Capital</span>
+                </h3>
+                <div class="space-y-4 relative z-10">
+                    <div class="flex justify-between items-end border-b border-white/5 pb-3">
+                        <span class="text-xs text-white/40">중위값 (Median)</span>
+                        <span class="text-2xl font-bold">320.0</span>
+                    </div>
+                    <div class="flex justify-between items-end border-b border-white/5 pb-3">
+                        <span class="text-xs text-white/40">평균값 (Mean)</span>
+                        <span class="text-xl font-semibold text-white/80">350.0</span>
+                    </div>
+                    <div class="pt-2">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-white/40">최저 (구로연합의원)</span>
+                            <span class="text-white/70">100.0</span>
+                        </div>
+                        <div class="w-full bg-white/5 rounded-full h-1.5 mb-3">
+                            <div class="bg-white/20 h-1.5 rounded-full" style="width: 11%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-white/40">최고 (강남척추 S병원)</span>
+                            <span class="text-white/90">850.0</span>
+                        </div>
+                        <div class="w-full bg-white/5 rounded-full h-1.5">
+                            <div class="bg-white/40 h-1.5 rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container"><canvas id="chartSeoul"></canvas></div>
+            </div>
+
+            <!-- 전국 -->
+            <div class="glass-panel p-6 rounded-2xl card-hover-effect relative overflow-hidden group">
+                <h3 class="text-sm font-bold tracking-widest uppercase text-white/50 mb-6 flex items-center justify-between">
+                    <span>🌏 전국 통계</span>
+                    <span class="text-white/30 font-mono group-hover:text-premium-gold transition-colors">National</span>
+                </h3>
+                <div class="space-y-4 relative z-10">
+                    <div class="flex justify-between items-end border-b border-white/5 pb-3">
+                        <span class="text-xs text-white/40">중위값 (Median)</span>
+                        <span class="text-2xl font-bold">270.0</span>
+                    </div>
+                    <div class="flex justify-between items-end border-b border-white/5 pb-3">
+                        <span class="text-xs text-white/40">평균값 (Mean)</span>
+                        <span class="text-xl font-semibold text-white/80">305.0</span>
+                    </div>
+                    <div class="pt-2">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-white/40">최저 (부산우리들)</span>
+                            <span class="text-white/70">60.0</span>
+                        </div>
+                        <div class="w-full bg-white/5 rounded-full h-1.5 mb-3">
+                            <div class="bg-white/20 h-1.5 rounded-full" style="width: 6%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-white/40">최고 (서울강남K)</span>
+                            <span class="text-white/90">990.0</span>
+                        </div>
+                        <div class="w-full bg-white/5 rounded-full h-1.5">
+                            <div class="bg-white/40 h-1.5 rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container"><canvas id="chartNat"></canvas></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategy Section -->
+    <section id="strategy" class="max-w-7xl mx-auto px-8 mb-32 anim-element" style="animation-delay: 0.5s;">
+        <div class="mb-10 text-center max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold tracking-tight mb-4">Pricing Strategy Architecture</h2>
+            <p class="text-white/50 font-light">
+                실손보험 모니터링 강화(5세대) 및 환자 정보 접근성 향상에 대응하기 위해, 
+                남양주백병원은 다음과 같이 철저히 계산된 '투트랙(Two-Track) 요금제'를 도입하여 
+                리스크를 헷지함과 동시에 프리미엄 병원으로서의 수익성을 보존합니다.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Track A -->
+            <div class="glass-panel rounded-[2rem] p-10 border border-premium-blue/20 relative overflow-hidden group">
+                <!-- Cyan Glow -->
+                <div class="absolute -top-32 -left-32 w-64 h-64 bg-premium-blue/20 rounded-full blur-[80px]"></div>
+                
+                <div class="relative z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-premium-blue/10 border border-premium-blue/30 rounded-full text-premium-blue text-xs font-bold tracking-widest uppercase mb-6">
+                        <span class="material-symbols-outlined text-[14px]">analytics</span>
+                        Defensive Model
+                    </div>
+                    <h3 class="text-3xl font-bold mb-2">Track A: AI 통계 기반가</h3>
+                    <p class="text-white/40 mb-8 font-light">경기권 중위 통계 타겟팅 및 맘카페 저항선 회피 전략</p>
+                    
+                    <div class="text-5xl font-bold mb-10 font-serif blue-text-gradient tracking-tight">
+                        320 ~ 350 <span class="text-2xl text-premium-blue/60 font-sans tracking-normal font-medium">만원</span>
+                    </div>
+
+                    <ul class="space-y-5">
+                        <li class="flex gap-4">
+                            <span class="material-symbols-outlined text-premium-blue mt-0.5">verified_user</span>
+                            <div>
+                                <h4 class="font-semibold text-white/90">실손 청구 리스크 최소화</h4>
+                                <p class="text-sm text-white/40 mt-1">최근 보험사 집중 모니터링 기준(상위 70% 타겟)에서 벗어나, 가장 안전한 구간인 중앙값(Median)에 전략적 포지셔닝.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <span class="material-symbols-outlined text-premium-blue mt-0.5">groups</span>
+                            <div>
+                                <h4 class="font-semibold text-white/90">환자 마찰 Zero화</h4>
+                                <p class="text-sm text-white/40 mt-1">지역 내 터무니없는 폭리 병원이라는 프레임을 원천 차단하고 '합리적인 대형 병원' 이미지를 굳히는 표준 가격선.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Track B -->
+            <div class="glass-panel rounded-[2rem] p-10 border border-premium-gold/30 relative overflow-hidden group shadow-[0_0_50px_rgba(212,175,55,0.05)] animate-glow-pulse">
+                <!-- Gold Glow -->
+                <div class="absolute -top-32 -right-32 w-80 h-80 bg-premium-gold/15 rounded-full blur-[100px]"></div>
+                
+                <div class="relative z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-premium-gold/10 border border-premium-gold/30 rounded-full text-premium-gold text-xs font-bold tracking-widest uppercase mb-6">
+                        <span class="material-symbols-outlined text-[14px]">diamond</span>
+                        Signature Model
+                    </div>
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-3xl font-bold mb-2">Track B: 프리미엄 시그니처</h3>
+                        <span class="bg-premium-gold text-premium-black text-xs font-bold px-3 py-1 rounded-sm tracking-widest">★ RECOMMENDED</span>
+                    </div>
+                    <p class="text-white/40 mb-8 font-light">초고가 바가지 배제, 최상의 진료 퀄리티 보장</p>
+                    
+                    <div class="text-5xl font-bold mb-10 font-serif gold-text-gradient tracking-tight">
+                        450 ~ 480 <span class="text-2xl text-premium-gold/60 font-sans tracking-normal font-medium">만원</span>
+                    </div>
+
+                    <ul class="space-y-5">
+                        <li class="flex gap-4">
+                            <span class="material-symbols-outlined text-premium-gold mt-0.5">workspace_premium</span>
+                            <div>
+                                <h4 class="font-semibold text-white/90">서울 강남권 대형병원 VIP 수준</h4>
+                                <p class="text-sm text-white/40 mt-1">시술 재료 단가 타협 없이 최고 품질만 사용하며, 서울 대형병원 1/2 가격에 상응하는 동일 퀄리티 의료 제공.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <span class="material-symbols-outlined text-premium-gold mt-0.5">balance</span>
+                            <div>
+                                <h4 class="font-semibold text-white/90">가장 윤리적인 이윤 극대화</h4>
+                                <p class="text-sm text-white/40 mt-1">단순 의료 수익을 쫓는 공장형 박리다매 마케팅이나, 7~800만원 대의 악덕 청구액을 단호히 거부하는 병원 철학의 실체화.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Quote / Footer -->
+    <footer class="max-w-4xl mx-auto px-8 pb-32 text-center anim-element" style="animation-delay: 0.7s;">
+        <div class="text-premium-gold mb-6">
+            <span class="material-symbols-outlined text-5xl opacity-40" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+        </div>
+        <p class="text-2xl md:text-3xl font-light font-serif italic text-white/80 leading-relaxed mb-10">
+            "가장 정교한 결정은 철저한 데이터에서 나오지만, <br>
+            가장 위대한 전략은 타협하지 않는 병원의 철학에서 시작됩니다."
+        </p>
+        <div class="flex flex-col items-center justify-center gap-2">
+            <div class="w-10 h-0.5 bg-premium-gold/50 mb-2"></div>
+            <h5 class="font-bold tracking-widest text-sm uppercase">남양주백병원 전략기획위원회</h5>
+            <p class="text-xs text-white/30 tracking-[0.2em]">Sovereign AI Intelligence System</p>
+        </div>
+    </footer>
+
+    <!-- Init script for Chart.js & Animations -->
+    <script>
+        // Trigger animations immediately
+        document.querySelectorAll('.anim-element').forEach(el => {
+            el.classList.add('animate-fade-in-up');
+            el.style.opacity = '1';
+        });
+
+        // Common Chart.js Options for Sparklines
+        const sharedChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(20, 20, 23, 0.9)',
+                    titleColor: '#d4af37',
+                    bodyColor: '#fff',
+                    borderColor: 'rgba(212, 175, 55, 0.3)',
+                    borderWidth: 1,
+                    padding: 10,
+                    displayColors: false,
+                    callbacks: {
+                        label: function(context) { return context.parsed.y + ' 만원'; }
+                    }
+                }
+            },
+            scales: {
+                y: { display: false, beginAtZero: true },
+                x: { 
+                    display: true, 
+                    grid: { display: false, drawBorder: false },
+                    ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 10, family: 'Pretendard' } }
+                }
+            },
+            elements: { bar: { borderRadius: 4 } }
+        };
+
+        // Render Charts Data
+        const renderChart = (id, data, color) => {
+            const ctx = document.getElementById(id).getContext('2d');
+            
+            // Create Gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, 120);
+            gradient.addColorStop(0, color);
+            gradient.addColorStop(1, 'rgba(20, 20, 23, 0)');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['최저', '중위', '평균', '최고'],
+                    datasets: [{
+                        data: data,
+                        backgroundColor: gradient,
+                        borderColor: color,
+                        borderWidth: 1,
+                        hoverBackgroundColor: color
+                    }]
+                },
+                options: sharedChartOptions
+            });
+        };
+
+        // Colors
+        const colorBlue = 'rgba(74, 144, 226, 0.8)';
+        const colorGold = 'rgba(212, 175, 55, 0.8)';
+        const colorWhite = 'rgba(255, 255, 255, 0.5)';
+
+        // Init
+        renderChart('chartNYJ', [120, 220, 235, 350], colorBlue);
+        renderChart('chartGG', [90, 280, 295, 520], colorWhite);
+        renderChart('chartSeoul', [100, 320, 350, 850], colorWhite);
+        renderChart('chartNat', [60, 270, 305, 990], colorWhite);
+    </script>
 </body>
 </html>
